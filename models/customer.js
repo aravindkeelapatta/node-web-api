@@ -11,7 +11,7 @@ var customerSchema = mongoose.Schema({
 	},
 	mobile: {
 		type: String,
-		required: true
+		
 	}
 });
 
@@ -23,5 +23,24 @@ module.exports.getCustomer = function(callback) {
 
 
 module.exports.createCustomer= function(customerObj, callback) {
-	return Customer.create(customerObj, callback)
+	return Customer.create(customerObj, callback)	
+}
+
+module.exports.editCustomer = function(id,customerObj,callback) {
+	return Customer.update({_id : id},
+		                   {$set : {
+		                   	  name : customerObj.name,
+		                   	  email : customerObj.email,
+		                   	  mobile : customerObj.mobile
+		                   }}, callback)
+}
+
+
+module.exports.deleteCustomer = function(id, callback) {
+	return Customer.remove({_id : id}, callback)
+}
+
+
+module.exports.getCustomerById = function(id, callback) {
+	return Customer.findById({_id : id}, callback)
 }

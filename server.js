@@ -39,12 +39,69 @@ router.post("/customer", function(request, response) {
 	})
 })
 
+// router.put("/customer/:id", function(request,response) {
+// 	var userId = request.params.id;
+// 	var customerObj = request.body;
+// 	Customer.editCustomer(userId, customerObj, function(err,data) {
+// 		if(err) {
+// 			throw err;
+// 		}
+// 		response.json(data);
+// 	})
+// })
+
+
+router.put("/editCustomer/:id", function(request,response) {
+	var userId = request.params.id;
+	var dataFromPostman = request.body;
+
+	Customer.getCustomerById(userId, function(err, dataFromDB) {
+		if(err) {
+			throw err;
+		}
+
+		var bodyObj = {
+			name : dataFromPostman.name || dataFromDB.name,
+			email : dataFromPostman.email || dataFromDB.email,
+			mobile : dataFromPostman.mobile || dataFromDB.mobile,
+		}
+
+	Customer.editCustomer(userId, bodyObj, function(err,data) {
+		if(err) {
+			throw err;
+		}
+		response.json(data);
+	  })
+
+	});
+})
+
+router.delete("/delete/:id", function(request,response) {
+	var userId = request.params.id;
+	Customer.deleteCustomer(userId, function(err,data) {
+		if(err) {
+			throw err;
+		}
+		response.json(data);
+	})
+})
+
+router.get("/getCustomer/:id", function(request,response) {
+	var userId = request.params.id;
+	Customer.getCustomerById(userId, function(err,data) {
+		if(err){
+			return err;
+		}
+		response.json(data);
+	})
+})
+
 app.use("/api", router);
 
 var PORT = process.env.PORT || 8081;
 
 app.listen(PORT, function() {
-	console.log("SErver is listening to PORT" +PORT)
+	console.log("Server is listening to PORT" +PORT)
 })
 
 
